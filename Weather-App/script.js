@@ -113,12 +113,14 @@ function formDate() {
 		"Friday",
 		"Saturday",
 	];
-	let currentDate = new Date();
+	
 	// currentDate.setHours(19);
 	//let hour = currentDate.getHours();
 	//let minute = currentDate.getMinutes();
 	//let period = hour >= 12 ? "PM" : "AM";
 	//hour = hour % 12 || 12; // Convert hour to 12-hour format
+
+	let currentDate = new Date();
 	return `${days[currentDate.getDay()]}, ${currentDate.getDate()} ${
 		months[currentDate.getMonth()]
 	} ${currentDate.getFullYear()}`;
