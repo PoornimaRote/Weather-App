@@ -36,7 +36,7 @@ function showResults(weatherData) {
 
 	// Set background image based on weather condition
 	setBackground(weatherData.weather[0].main);
-	//setDayNightMode();
+	setDayNightMode(weatherData);
 }
 
 function setBackground(weatherCondition) {
@@ -73,23 +73,37 @@ function setBackground(weatherCondition) {
 	body.style.backgroundImage = `url(${background})`;
 }
 
-// function setDayNightMode() {
-// 	let body = document.querySelector("body");
-// 	let currentDate = new Date();
-// 	let hour = currentDate.getHours();
+function setDayNightMode(weatherData) {
+	let body = document.querySelector("body");
+	let currentDate = new Date();
+	let timezoneOffset = weatherData.timezone;
 
-// 	if (hour >= 18 && hour < 6) {
-// 		// Nighttime
-// 		console.log("Night mode activated");
-// 		body.classList.add("night-mode");
-// 	} else {
-// 		// Daytime
-// 		console.log("Day mode activated");
-// 		body.classList.remove("night-mode");
-// 	}
-// }
+	// Adjust the current time to the city's time
+	currentDate.setHours(currentDate.getHours() - 5);
+	currentDate.setMinutes(currentDate.getMinutes() - 30);
 
-function formDate() {
+	currentDate.setHours(
+		currentDate.getHours() + Math.floor(timezoneOffset / 3600)
+	);
+	currentDate.setMinutes(
+		currentDate.getMinutes() + (timezoneOffset % 3600) / 60
+	);
+
+	let hour = currentDate.getHours();
+
+	if (hour >= 18 || hour < 6) {
+		// Nighttime
+		console.log("Night mode activated");
+		body.style.backgroundImage = "url('background/nightSky.jpeg')";
+		body.classList.add("night-mode");
+	} else {
+		// Daytime
+		console.log("Day mode activated");
+		body.classList.remove("night-mode");
+	}
+}
+
+function formDate(weatherData) {
 	let months = [
 		"January",
 		"Februray",
@@ -113,15 +127,31 @@ function formDate() {
 		"Friday",
 		"Saturday",
 	];
-	
-	// currentDate.setHours(19);
-	//let hour = currentDate.getHours();
-	//let minute = currentDate.getMinutes();
-	//let period = hour >= 12 ? "PM" : "AM";
-	//hour = hour % 12 || 12; // Convert hour to 12-hour format
 
 	let currentDate = new Date();
+	let timezoneOffset = weatherData.timezone;
+	
+	// Adjust the current time to the city's time
+	currentDate.setHours(currentDate.getHours() - 5);
+	currentDate.setMinutes(currentDate.getMinutes() - 30);
+
+	currentDate.setHours(
+		currentDate.getHours() + Math.floor(timezoneOffset / 3600)
+	);
+	currentDate.setMinutes(
+		currentDate.getMinutes() + (timezoneOffset % 3600) / 60
+	);
+
+	let hour = currentDate.getHours();
+	let minute = currentDate.getMinutes();
+	let period = hour >= 12 ? "PM" : "AM";
+	hour = hour % 12 || 12; // Convert hour to 12-hour format
+
+	let formattedTime = `${hour}:${
+		minute < 10 ? "0" + minute : minute
+	} ${period}`;
+
 	return `${days[currentDate.getDay()]}, ${currentDate.getDate()} ${
 		months[currentDate.getMonth()]
-	} ${currentDate.getFullYear()}`;
+	} ${currentDate.getFullYear()} || ${formattedTime}`;
 }
