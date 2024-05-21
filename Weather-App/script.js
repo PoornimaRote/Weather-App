@@ -32,7 +32,7 @@ function showResults(weatherData) {
 		weatherData.main.temp_min
 	)}°c / ${Math.round(weatherData.main.temp_max)}°c`;
 	weather.innerText = `${weatherData.weather[0].main}`;
-	date.innerText = formDate();
+	date.innerText = formDate(weatherData);
 
 	// Set background image based on weather condition
 	setBackground(weatherData.weather[0].main);
